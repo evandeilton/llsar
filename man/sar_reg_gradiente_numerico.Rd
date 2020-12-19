@@ -17,11 +17,11 @@ sar_reg_gradiente_numerico(
 
 \item{func}{Função implementada da log-verossimilhança ou outra qualquer;}
 
-\item{method}{Método de derivação. Veja \link{\code{numDeriv::hessian()}};}
+\item{method}{Método de derivação. Veja \code{\link[numDeriv]{grad}};}
 
 \item{method.args}{argumentos extras passados para a função.}
 }
 \description{
-Determina numericamente a matriz hessiana de uma função.
-Para mais detalhes ver \link{\code{numDeriv::hessian()}};
+Determina numericamente ovetor gradiente de uma função.
+Para mais detalhes ver \code{\link[numDeriv]{grad}};
 }
