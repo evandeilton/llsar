@@ -12,6 +12,8 @@ máxima verossimilhança.
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/llsar)](https://CRAN.R-project.org/package=llsar)
+[![Travis build
+status](https://travis-ci.com/evandeilton/llsar.svg?branch=master)](https://travis-ci.com/evandeilton/llsar)
 <!-- badges: end -->
 
 The goal of llsar is to …

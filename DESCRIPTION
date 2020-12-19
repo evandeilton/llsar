@@ -11,10 +11,17 @@ Authors@R:
 Description: Fornece a implementação do processo de estimação dos parâmetros de um modelo SAR (Spatial AutoRegressive) por máxima verossimilhança, através de derivação numérica e também analítica com otimização por Newton-Rapson e/ou Quasi-Newton (BGFS e L-BFGS-B)
 License: MIT + file LICENSE
 Suggests: 
-    testthat
+    testthat,
+    roxygen2,
+    knitr,
+    rmarkdown
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Depends: 
     R (>= 2.10)
+Imports: 
+    rlang (>= 0.1.2),
+    magrittr
+VignetteBuilder: knitr
