@@ -1,13 +1,14 @@
 Package: llsar
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Estimando os parâmetros de um Modelo SAR (Spatial AutoRegressive) por máxima verossimilhança (Likelihood Spatial AutoRegressive - SAR).
+Version: 1.0.0
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Jose",
+           family = "Lopes",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "evandeilton@gmail.com",
+           comment = ""
+           )
+Description: Fornece a implementação do processo de estimação dos parâmetros de um modelo SAR (Spatial AutoRegressive) por máxima verossimilhança, através de derivação numérica e também analítica com otimização por Newton-Rapson e/ou Quasi-Newton (BGFS e L-BFGS-B)
 License: MIT + file LICENSE
 Suggests: 
     testthat
