@@ -5,8 +5,6 @@
 \title{Dados de tiroteio do Rio de Janeiro}
 \usage{
 data("rio_tiroteio", package = "llsar")
-
-data("rio_shape", package = "llsar")
 }
 \description{
 A site \href{https://fogocruzado.org.br/}{Fogo Cruzado} é uma plataforma digital colaborativa para monitoramento
@@ -16,6 +14,4 @@ de uma API, feito pela equipe do \href{https://voltdata.info/}{\code{voltdatalab
 \href{https://api.fogocruzado.org.br/}{site} os dados de tiroteio podem ser extraídos diretamente a API com apoio
 do pacote \code{crossfire}. Para tornar os dados no nível município precisar de alguma intervenção manual.
 Estes dados do pacote estão no nível bairro e já foram tratados e a consulta foi feita em novembro/2020.
-
-Os dados de shapes de todos os bairros do Rio de Janeiro (163 bairros, em 2020) para plotar os gráficos, podem ser baixados diteramente do \href{https://www.data.rio/datasets/limite-de-bairros}{DataRio} depois importados pelo R com apoio dos pacotes \verb{rgdal e sp}. Nesse arquivo deixamos os dados prontos para usar conforme uso.
 }

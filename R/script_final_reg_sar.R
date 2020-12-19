@@ -10,7 +10,7 @@
 ## (1) Implementação da log-vero, gradiente e hessiana numéricos
 ## -------------------------------------------------------------
 
-#' Log-verossimilhança com covariáveis modelo SAR
+#' Log-verossimilhanca com covariaveis modelo SAR
 #' @description Determina a log-verossimilhança com base
 #' em uma realização de uma normal multivariada.
 #' @param param vetor nomeado de parâmetros a serem estimados
@@ -40,7 +40,7 @@ sar_reg_lvero_dmvnorm <- function(param, formula, dados, A){
   return(-ll)
 }
 
-#' Vetor gradiente com derivadas numéricas modelo SAR
+#' Vetor gradiente com derivadas numericas modelo SAR
 #' @description Determina numericamente ovetor gradiente de uma função.
 #' Para mais detalhes ver \code{\link[numDeriv]{grad}};
 #' @param param vetor de parâmetros onde func será avaliada por dirivadas numéricas aproximadas;
@@ -51,7 +51,7 @@ sar_reg_gradiente_numerico <- function(param, func, method="Richardson", method.
   numDeriv::grad(func = func, x = param, method = method, method.args = method.args, ...)
 }
 
-#' Matriz hessiana com derivadas numéricas modelo SAR
+#' Matriz hessiana com derivadas numericas modelo SAR
 #' @description Determina numericamente a matriz hessiana de uma função.
 #' Para mais detalhes ver  \code{\link[numDeriv]{hessian}};
 #' @param param vetor de parâmetros onde func será avaliada por dirivadas numéricas aproximadas;
@@ -66,7 +66,7 @@ sar_reg_hessiano_numerico <- function(param, func, method="Richardson", method.a
 ## (2) Implementação da log-vero, gradiente e hessiana analíticos
 ## -------------------------------------------------------------
 
-#' Log-verossimilhança analítica com covariáveis modelo SAR
+#' Log-verossimilhanca analitica com covariaveis modelo SAR
 #' @param param Vetor nomeado de parâmetros a serem estimados
 #' @param formula Formula do R estilo y ~ b0 +b1X1 + ... + bnXn. Se não quiser
 #' colocar covariáveis, usar y ~ 1.
@@ -95,7 +95,7 @@ sar_reg_lvero_analitico <- function(param, formula, dados, A){
   return(-sum(ll))
 }
 
-#' Vetor gradiente com derivadas analíticas modelo SAR
+#' Vetor gradiente com derivadas analiticas modelo SAR
 #' @description Determina analiticamente a matriz hessiana do modelo SAR.
 #' @param param Vetor nomeado de parâmetros a serem estimados
 #' @param formula Formula do R estilo y ~ b0 +b1X1 + ... + bnXn. Se não quiser
@@ -157,7 +157,7 @@ sar_reg_gradiente_analitico <- function(param, formula, dados, A, ...){
   return(U)
 }
 
-#' Matriz hessiana com derivadas analíticas modelo SAR
+#' Matriz hessiana com derivadas analiticas modelo SAR
 #' @description Determina a matriz hessiana analítica do modelo SAR.
 #' @param param Vetor nomeado de parâmetros a serem estimados
 #' @param formula Formula do R estilo y ~ b0 +b1X1 + ... + bnXn. Se não quiser
@@ -264,7 +264,7 @@ sar_reg_hessiano_analitico <- function(param, formula, dados, A, ...){
 ## (3) Implementação do método de Newton
 ## -------------------------------------------------------------
 
-#' Método de Newton com aproximação numérica do gradiente e hessiana
+#' Metodo de Newton com aproximacao numerica do gradiente e hessiana
 #' @description Função genérica para obter estimativas de ll usando o método de
 #' Newton que tem como base o vetor gradiente e a matrix hessiana. Nessa
 #' implementação, as derivadas são calculadas via aproximação numérica
@@ -322,7 +322,7 @@ fit_newton <- function(lvero, gr, hess, formula, dados, A, init = NULL, verbose 
               formula = formula, dados = dados, A = A))
 }
 
-#' Ré-estimação dos parâmetros com os ótimos obtidos por Newton
+#' Re-estimacao dos parametros com os otimos obtidos por Newton
 #' @description Essa função serve para obter as estatísticas do modelo e
 #' confirmar a convergência usando método de quasi-Newton implementado
 #' na função optim. Se der erro no algoritmo BFGS, tentamos novamente

@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_final_reg_sar.R
 \name{sar_reg_hessiano_numerico}
 \alias{sar_reg_hessiano_numerico}
-\title{Matriz hessiana com derivadas numéricas modelo SAR}
+\title{Matriz hessiana com derivadas numericas modelo SAR}
 \usage{
 sar_reg_hessiano_numerico(
   param,

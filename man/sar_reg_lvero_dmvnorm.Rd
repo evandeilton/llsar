@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_final_reg_sar.R
 \name{sar_reg_lvero_dmvnorm}
 \alias{sar_reg_lvero_dmvnorm}
-\title{Log-verossimilhança com covariáveis modelo SAR}
+\title{Log-verossimilhanca com covariaveis modelo SAR}
 \usage{
 sar_reg_lvero_dmvnorm(param, formula, dados, A)
 }

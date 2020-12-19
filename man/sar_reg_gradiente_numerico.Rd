@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_final_reg_sar.R
 \name{sar_reg_gradiente_numerico}
 \alias{sar_reg_gradiente_numerico}
-\title{Vetor gradiente com derivadas numéricas modelo SAR}
+\title{Vetor gradiente com derivadas numericas modelo SAR}
 \usage{
 sar_reg_gradiente_numerico(
   param,

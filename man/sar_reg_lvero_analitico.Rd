@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_final_reg_sar.R
 \name{sar_reg_lvero_analitico}
 \alias{sar_reg_lvero_analitico}
-\title{Log-verossimilhança analítica com covariáveis modelo SAR}
+\title{Log-verossimilhanca analitica com covariaveis modelo SAR}
 \usage{
 sar_reg_lvero_analitico(param, formula, dados, A)
 }
@@ -17,5 +17,5 @@ colocar covariáveis, usar y ~ 1.}
 \item{A}{Matrix (n x n) de adjacências do modelo.}
 }
 \description{
-Log-verossimilhança analítica com covariáveis modelo SAR
+Log-verossimilhanca analitica com covariaveis modelo SAR
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_final_reg_sar.R
 \name{sar_reg_gradiente_analitico}
 \alias{sar_reg_gradiente_analitico}
-\title{Vetor gradiente com derivadas analíticas modelo SAR}
+\title{Vetor gradiente com derivadas analiticas modelo SAR}
 \usage{
 sar_reg_gradiente_analitico(param, formula, dados, A, ...)
 }

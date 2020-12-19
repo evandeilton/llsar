@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_final_reg_sar.R
 \name{sar_reg_hessiano_analitico}
 \alias{sar_reg_hessiano_analitico}
-\title{Matriz hessiana com derivadas analíticas modelo SAR}
+\title{Matriz hessiana com derivadas analiticas modelo SAR}
 \usage{
 sar_reg_hessiano_analitico(param, formula, dados, A, ...)
 }

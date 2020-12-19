@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_final_reg_sar.R
 \name{fit_quasi_newton}
 \alias{fit_quasi_newton}
-\title{Ré-estimação dos parâmetros com os ótimos obtidos por Newton}
+\title{Re-estimacao dos parametros com os otimos obtidos por Newton}
 \usage{
 fit_quasi_newton(fit)
 }

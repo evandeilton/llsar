@@ -2,7 +2,7 @@
 % Please edit documentation in R/script_final_reg_sar.R
 \name{fit_newton}
 \alias{fit_newton}
-\title{Método de Newton com aproximação numérica do gradiente e hessiana}
+\title{Metodo de Newton com aproximacao numerica do gradiente e hessiana}
 \usage{
 fit_newton(
   lvero,
