@@ -20,6 +20,10 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, error=F, message=F, warning=F, attr.source='.numberLines')
+r = getOption("repos")
+r["CRAN"] = "http://cran.us.r-project.org"
+options(repos = r)
+
 if(!require(schoolmath)){install.packages("schoolmath")}
 if(!require(tidyverse)){install.packages("tidyverse")}
 if(!require(knitr)){install.packages("knitr")}
