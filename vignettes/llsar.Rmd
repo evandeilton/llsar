@@ -31,13 +31,13 @@ if(!require(mvtnorm)){install.packages("mvtnorm")}
 if(!require(numDeriv)){install.packages("numDeriv")}
 if(!require(bbmle)){install.packages("bbmle")}
 if(!require(broom)){install.packages("broom")}
-if(!require(tidyverse)) {install.packages("tidyverse")}
 if(!require(rgdal)) {install.packages("rgdal")}
 if(!require(maptools)) {install.packages("maptools")}
 if(!require(viridis)) {install.packages("viridis")}
 if(!require(rgeos)){install.packages("rgeos")}
 if(!require(gpclib)){install.packages("gpclib")}
 if(!require(crossfire)){install.packages("crossfire")}
+if(!require(spdep)){install.packages("sp")}
 if(!require(spdep)){install.packages("spdep")}
 if(!require(llsar)){devtools::install_github("evandeilton/llsar")}
 ```
