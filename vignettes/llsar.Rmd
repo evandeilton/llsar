@@ -1,31 +1,13 @@
 ---
-title: "Estimando os parâmetros de um Modelo SAR (Spatial AutoRegressive) por máxima verossimilhança."
+title: "llsar"
 author: "José Lopes"
-output:
-  prettydoc::html_pretty:
-    theme: cayman
-    highlight: github
-    toc: TRUE
-    number_sections: TRUE
-  html_document:
-    df_print: paged
 bibliography: referencias.bib
 biblio-style: apalike
-editor_options: 
-  markdown: 
-    wrap: 80
-fontsize: 11pt
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{llsar}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-
-# title: "llsar"
-# output: rmarkdown::html_vignette
-# vignette: >
-#   %\VignetteIndexEntry{llsar}
-#   %\VignetteEngine{knitr::rmarkdown}
-#   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -127,7 +109,7 @@ A <- rio_proximidades
 ```
 
 
-```{r, fig.pos="h", fig.align='center', fig.height=8, fig.width=12, fig.cap="Mapa de ocorrências de tiroteio"}
+```{r, fig.pos="h", fig.align='center', fig.height=4, fig.width=6, fig.cap="Mapa de ocorrências de tiroteio"}
 rioGrid <- fortify(rio_shape, region = "CODBAIRRO_")
 rioGrid %>%
   mutate(id = as.integer(id)) %>%
@@ -141,7 +123,7 @@ rioGrid %>%
 
 
 
-```{r, fig.pos="h", fig.align='center', fig.height=8, fig.width=12, fig.cap="Matriz de adjacências entre bairros do Rio de Janeiro"}
+```{r, fig.pos="h", fig.align='center', fig.height=4,  fig.width=6, fig.cap="Matriz de adjacências entre bairros do Rio de Janeiro"}
 op <- par(mar = c(5, 4, 4, 2) - 1.5)
 rioPoly <- poly2nb(rio_shape, row.names = rio_shape@data$NOME)
 rioNN <- nb2listw(rioPoly, style = "B", zero.policy = TRUE)
@@ -256,8 +238,8 @@ a1$processamento %>%
 
 Embora tendo que $\rho$ foi estimado com valor negativo e estatísticamente igual a zero, [@ord1975estimation] argumenta que sob algumas condições dos pesos, tem-se que $\rho < 1$. Além disso, se consideramos o módulo de $|\rho|$ teremos uma estimativa que atende o critério dado nesse problema. O perfil de verossimilhança na Figura 1 mostra que no range de variação, ele pode ser qualquer valor entre zero e 0.06 com 99% de confiança. Do mesmo modo as outras estimativas estão contidas em intervalos bem definidos e sem sinais de alteração em virtude de mínimos locais.
   
-```{r, fig.pos="h", fig.align='center', fig.height=3, fig.width=10, fig.cap="Perfis de verossimilhança"}
-par(mfrow = c(1,3))
+```{r, fig.pos="h", fig.height=6, fig.width=8, fig.align='center', fig.cap="Perfis de verossimilhança"}
+par(mfrow = c(2,2)) 
 plot(fit1_profile)
 ```
 
@@ -299,8 +281,6 @@ a2$processamento %>%
                caption = "Chutes iniciais",
                col.names = c("intercepto","loginhabitants","sigma","rho","loglik","niteracoes"),
                row.names = F) 
-# %>% 
-#   kableExtra::kable_styling(font_size = tfonte)
 ```
 Assim, na Tabela 5 estão as estimativas dos parâmetros. Novamente o parâmetro $\rho$ teve sua estimativa negativa e estatísticamente nula com p.valor de $-0.0071 (0.0244)$. Como esperado, o parâmetro $sigma$ na presença da covariável logihabitants teve uma queda em relação ao modelo simples e o intercepto mudou significativamente. É importante notar também que o valor ótimo da log-vero ficou menor, também esperado uma vez que a preditora agrega mais informação ao modelo.
 ```{r, fig.pos="h", fig.align='center'}
@@ -313,13 +293,10 @@ tidy(fit2) %>%
                caption = "MLE modelo count ~ loginhabitants", 
                row.names = F,
                col.names = c("term", "estimate", "se", "z.value", "p.value", "ci2.5","ci97.5")) 
-# %>% 
-#   kableExtra::kable_styling(font_size = tfonte)
 ```
 
 Por fim, analisamos os perfis de verossimilhança afim de entender melhor o comportamento dos prâmetros próximo à região e convergência.
-```{r, fig.pos="h", fig.align='center', fig.height=6, fig.width=10, fig.cap="Perfis de verossimilhança"}
-par(mfrow = c(2,2))
+```{r, fig.pos="h", fig.align='center', fig.height=6, fig.width=8, fig.cap="Perfis de verossimilhança"}
 plot(fit2_profile)
 ```
 A Figura 2 mostra que houve oscilação na convergência do intercepto e também da variável loginhabitants na vizinhança do ótimo. Como esperado $\sigma$ apresenta assimetria, porém sem perda de estabilidade na vizinhança do ótimo. Quanto a $\rho$ vemos que ele possui boa estabilidade em torno de zero na vizinhança, mas podendo estar em $(0, 0.006)$.
@@ -356,7 +333,7 @@ bind_cols(medida = c("observado","predsimples","predcovariavel"),
 
 Os top cinco municípios com mais ocorrências de acordo a base são: Cidade de Deus, Complexo do Alemão, Tijuca, Vicente de Carvalho e Cordovil. Destes, o modelo predito com uma variável apontou somente Tijuca, porém vale salientar aqui que mesmo com apenas uma covariável (loglhabitantes) a correlação entre o observado e os preditos saiu de 0.008 para 0.3974 com a adição de apenas uma variável explicativa. 
 
-```{r, fig.pos="h", fig.align='center', fig.height=4, fig.width=10, fig.cap="Perfis de verossimilhança"}
+```{r, fig.pos="h", fig.align='center', fig.height=8, fig.width=8, fig.cap="Perfis de verossimilhança"}
 rioGrid <- try(fortify(rio_shape, region = "CODBAIRRO_"))
 
 da <- rioGrid %>%
@@ -386,7 +363,7 @@ g3 <- da %>%
   theme_classic() +
   theme(legend.position = "bottom")+
   labs(title = "(C) Predito com covariável")
-gridExtra::grid.arrange(g1, g2, g3, nrow = 1)
+gridExtra::grid.arrange(g1, g2, g3, ncol = 2)
 ``` 
  
 Observando a Figura 3 nota-se que o modelo com uma covariável (C) acerta mais para baixas contagens e o modelo sem covariável (B), como esperado faz uma média geral por município. Os dados são bastantes assimetricos então talvez uma estrutura que contemple melhor essa relação possa trazer maior ganho.

@@ -59,7 +59,7 @@ system.time({
   fit1_profile <- bbmle::profile(fit1) 
 })
 #>    user  system elapsed 
-#>   43.34    0.00   43.37
+#>   42.55    0.07   42.67
 ```
 
 ### Ajuste do modelo CAR com uma covariável algebricamente
@@ -74,7 +74,7 @@ system.time({
   fit1_profile <- bbmle::profile(fit1)
 })
 #>    user  system elapsed 
-#>   21.87    0.00   21.88
+#>    22.5     0.0    22.5
 ```
 
 ### Estatísticas

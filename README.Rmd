@@ -98,7 +98,7 @@ system.time({
   
 ### Estatísticas
   
-```{r, echo=TRUE, eval=TRUE, fig.pos="h", fig.align='center', fig.height=8, fig.width=12, fig.cap="Perfis de verossimilhança"}
+```{r, echo=TRUE, eval=TRUE, fig.pos="h", fig.align='center', fig.height=6, fig.width=6, fig.cap="Perfis de verossimilhança"}
 plot(fit1_profile)
 ```
 
