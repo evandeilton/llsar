@@ -18,6 +18,7 @@
 #' colocar covariáveis, usar y ~ 1.
 #' @param dados Base de dados (n x k) com as covariáveis de interesse
 #' @param A Matrix (n x n) de adjacências do modelo.
+#' @importFrom mvtnorm dmvnorm
 #' @export
 sar_reg_lvero_dmvnorm <- function(param, formula, dados, A){
   mfx <- model.frame(formula, dados)
@@ -48,6 +49,7 @@ sar_reg_lvero_dmvnorm <- function(param, formula, dados, A){
 #' @param func Função implementada da log-verossimilhança ou outra qualquer;
 #' @param method Método de derivação. Veja \code{\link[numDeriv]{grad}};
 #' @param method.args argumentos extras passados para a função.
+#' @importFrom numDeriv grad
 #' @export
 sar_reg_gradiente_numerico <- function(param, func, method="Richardson", method.args = list(), ...) {
   numDeriv::grad(func = func, x = param, method = method, method.args = method.args, ...)
@@ -60,6 +62,7 @@ sar_reg_gradiente_numerico <- function(param, func, method="Richardson", method.
 #' @param func Função implementada da log-verossimilhança ou outra qualquer;
 #' @param method Método de derivação. Veja \code{\link[numDeriv]{hessian}};
 #' @param method.args argumentos extras passados para a função.
+#' @importFrom numDeriv hessian
 #' @export
 sar_reg_hessiano_numerico <- function(param, func, method="Richardson", method.args = list(), ...) {
   numDeriv::hessian(func = func, x = param, method = method, method.args = method.args, ...)
@@ -339,9 +342,10 @@ fit_newton <- function(lvero, gr, hess, formula, dados, A, init = NULL, verbose 
 #' @param fit Objeto obtido pela função fit_newton
 #' @return Um objeto da classe 'mle2' herdada do pacote bbmle onde
 #' podemos obter várias estatísticas
+#' @importFrom bbmle mle2
 #' @export
 fit_quasi_newton <- function(fit){
-  fit <- try(mle2(minuslogl = fit$ll,
+  fit <- try(bbmle::mle2(minuslogl = fit$ll,
                   start = fit$coeficientes,
                   method="BFGS",
                   optimizer = "optim",
@@ -349,7 +353,7 @@ fit_quasi_newton <- function(fit){
   out <- if(class(fit) != "try-error"){
     fit
   } else {
-    try(mle2(minuslogl = fit$ll,
+    try(bbmle::mle2(minuslogl = fit$ll,
              start = abs(fit$coeficientes),
              method="L-BFGS-B",
              optimizer = "optim",
