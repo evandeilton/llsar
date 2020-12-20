@@ -6,7 +6,7 @@ cache: packages
 matrix:
   include:
   - r: devel
-  - r: release
+  #- r: release
     after_success:
     - Rscript -e 'covr::codecov()'
     before_cache:
