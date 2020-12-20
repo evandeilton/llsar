@@ -20,6 +20,8 @@ sar_reg_gradiente_numerico(
 \item{method}{Método de derivação. Veja \code{\link[numDeriv]{grad}};}
 
 \item{method.args}{argumentos extras passados para a função.}
+
+\item{...}{Passagem de argumentos extras de funções internas.}
 }
 \description{
 Determina numericamente ovetor gradiente de uma função.

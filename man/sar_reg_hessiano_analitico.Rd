@@ -15,6 +15,8 @@ colocar covariáveis, usar y ~ 1.}
 \item{dados}{Base de dados (n x k) com as covariáveis de interesse}
 
 \item{A}{Matrix (n x n) de adjacências do modelo.}
+
+\item{...}{Passagem de argumentos extras de funções internas.}
 }
 \description{
 Determina a matriz hessiana analítica do modelo SAR.

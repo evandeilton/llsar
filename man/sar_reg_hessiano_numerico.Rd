@@ -20,6 +20,8 @@ sar_reg_hessiano_numerico(
 \item{method}{Método de derivação. Veja \code{\link[numDeriv]{hessian}};}
 
 \item{method.args}{argumentos extras passados para a função.}
+
+\item{...}{Passagem de argumentos extras de funções internas.}
 }
 \description{
 Determina numericamente a matriz hessiana de uma função.

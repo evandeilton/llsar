@@ -306,14 +306,14 @@ A Figura 2 mostra que houve oscilação na convergência do intercepto e também
 Na Tabela 6 tem-se que em 20% das unidades amostradas houve entre 27 e 101 registros de tiroteio na amostra observada. Já para os preditos, temos que no modelo simples, a valor predito ficou entre 9 e 10 para todos os municípios. Já para o modelo com a variável loginhabitants os preditos foram mais realistas.
 
 ```{r, eval=T, echo=T}
-predict_simples     <- sar_reg_predict(fit1) %>% rename("pred_s" = pred)
-predict_covariaveis <- sar_reg_predict(fit2) %>% rename("pred_c" = pred)
+predict_simples     <- sar_reg_predict_oot(fit1) %>% rename("pred_s" = pred)
+predict_covariaveis <- sar_reg_predict_oot(fit2) %>% rename("pred_c" = pred)
 ```
 
 
 ```{r}
-simples <- sar_reg_predict(fit1) %>% rename("pred_s" = pred)
-covaria <- sar_reg_predict(fit2) %>% rename("pred_c" = pred)
+simples <- sar_reg_predict_oot(fit1) %>% rename("pred_s" = pred)
+covaria <- sar_reg_predict_oot(fit2) %>% rename("pred_c" = pred)
 predis  <- rio_tiroteio %>% 
   dplyr::select(id = CODBAIRRO, bairro = neighborhood, count) %>% 
   dplyr::inner_join(simples, by = "id") %>% 

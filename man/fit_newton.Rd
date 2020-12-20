@@ -36,6 +36,8 @@ colocar covariáveis, usar y ~ 1.}
 \item{verbose}{Exibe informações durante a maximização}
 
 \item{tol}{Tolerância de convergência das estimativas.}
+
+\item{...}{Passagem de argumentos extras de funções internas.}
 }
 \value{
 lista com dados da otimização
