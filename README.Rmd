@@ -46,7 +46,8 @@ O pacote pode ser instalado diretamente pelo [GitHub](https://github.com/) com:
 
 ```{r, echo=TRUE, eval=FALSE}
 # install.packages("devtools")
-devtools::install_github("evandeilton/llsar")
+devtools::install_github(repo = "evandeilton/llsar", 
+                         build_vignettes = TRUE)
 ```
 
 ## Vinheta
@@ -62,15 +63,9 @@ vignette(topic = "llsar", package = "llsar")
 ### Carregando dados
 
 ```{r, echo=TRUE, eval=TRUE}
-# Pacotes
+# Pacotes para trabalhar
 if(!require(tidyverse)){install.packages("tidyverse")}
 if(!require(bbmle)){install.packages("bbmle")}
-if(!require(llsar)){
-devtools::install_github(repo = "evandeilton/llsar", 
-                         force = TRUE,
-                         build_vignettes = TRUE,
-                         build_manual = TRUE)
-}
 
 # Dados
 data("rio_tiroteio", package = "llsar")

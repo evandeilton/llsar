@@ -23,7 +23,8 @@ O pacote pode ser instalado diretamente pelo
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("evandeilton/llsar")
+devtools::install_github(repo = "evandeilton/llsar", 
+                         build_vignettes = TRUE)
 ```
 
 ## Vinheta
@@ -39,15 +40,9 @@ vignette(topic = "llsar", package = "llsar")
 ### Carregando dados
 
 ``` r
-# Pacotes
+# Pacotes para trabalhar
 if(!require(tidyverse)){install.packages("tidyverse")}
 if(!require(bbmle)){install.packages("bbmle")}
-if(!require(llsar)){
-devtools::install_github(repo = "evandeilton/llsar", 
-                         force = TRUE,
-                         build_vignettes = TRUE,
-                         build_manual = TRUE)
-}
 
 # Dados
 data("rio_tiroteio", package = "llsar")
@@ -72,7 +67,7 @@ system.time({
   fit1_profile <- bbmle::profile(fit1) 
 })
 #>    user  system elapsed 
-#>   43.25    0.06   43.36
+#>   40.93    0.00   40.98
 ```
 
 ### Ajuste do modelo CAR com uma covariável algebricamente
@@ -87,7 +82,7 @@ system.time({
   fit1_profile <- bbmle::profile(fit1)
 })
 #>    user  system elapsed 
-#>   22.06    0.00   22.09
+#>   20.56    0.00   20.61
 ```
 
 ### Estatísticas
