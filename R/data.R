@@ -13,9 +13,14 @@
 NULL
 
 #' Dados de shape da cidade do Rio de Janeiro
-#' @description Os dados de shapes de todos os bairros do Rio de Janeiro (163 bairros, em 2020) para plotar os gráficos, podem ser baixados diteramente do [DataRio](https://www.data.rio/datasets/limite-de-bairros) depois importados pelo R com apoio dos pacotes `rgdal e sp`. Nesse arquivo deixamos os dados prontos para usar conforme uso.
-#'
+#' @description Objeto da classe `SpatialPolygonsDataFrame`. Os dados de shapes de todos os bairros do Rio de Janeiro (163 bairros, em 2020) para plotar os gráficos, podem ser baixados diteramente do [DataRio](https://www.data.rio/datasets/limite-de-bairros) depois importados pelo R com apoio dos pacotes `rgdal e sp`.
 #' @name rio_shape
 #' @usage data("rio_shape", package = "llsar")
 NULL
 
+#' Matriz simética de proximidades dos bairros cidade do Rio de Janeiro
+#' @description Matriz de 0 e 1 com as ajacências dos municípios. Se um município possui adjacência com outro recebe 1 senão, recebe 0.
+#'
+#' @name rio_proximidades
+#' @usage data("rio_proximidades", package = "llsar")
+NULL

@@ -1,5 +1,5 @@
 Package: llsar
-Title: Estimando os parâmetros de um Modelo SAR (Spatial AutoRegressive) por máxima verossimilhança (Likelihood Spatial AutoRegressive - SAR).
+Title: Estimando os parametros de um Modelo SAR (Spatial AutoRegressive) por maxima verossimilhanca (Likelihood Spatial AutoRegressive - SAR).
 Version: 1.0.0
 Authors@R: 
     person(given = "Jose",
