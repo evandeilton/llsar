@@ -18,6 +18,7 @@
 #' colocar covariáveis, usar y ~ 1.
 #' @param dados Base de dados (n x k) com as covariáveis de interesse
 #' @param A Matrix (n x n) de adjacências do modelo.
+#' @export
 sar_reg_lvero_dmvnorm <- function(param, formula, dados, A){
   mfx <- model.frame(formula, dados)
   Y   <- model.response(mfx)
@@ -47,6 +48,7 @@ sar_reg_lvero_dmvnorm <- function(param, formula, dados, A){
 #' @param func Função implementada da log-verossimilhança ou outra qualquer;
 #' @param method Método de derivação. Veja \code{\link[numDeriv]{grad}};
 #' @param method.args argumentos extras passados para a função.
+#' @export
 sar_reg_gradiente_numerico <- function(param, func, method="Richardson", method.args = list(), ...) {
   numDeriv::grad(func = func, x = param, method = method, method.args = method.args, ...)
 }
@@ -58,6 +60,7 @@ sar_reg_gradiente_numerico <- function(param, func, method="Richardson", method.
 #' @param func Função implementada da log-verossimilhança ou outra qualquer;
 #' @param method Método de derivação. Veja \code{\link[numDeriv]{hessian}};
 #' @param method.args argumentos extras passados para a função.
+#' @export
 sar_reg_hessiano_numerico <- function(param, func, method="Richardson", method.args = list(), ...) {
   numDeriv::hessian(func = func, x = param, method = method, method.args = method.args, ...)
 }
@@ -72,6 +75,7 @@ sar_reg_hessiano_numerico <- function(param, func, method="Richardson", method.a
 #' colocar covariáveis, usar y ~ 1.
 #' @param dados Base de dados (n x k) com as covariáveis de interesse
 #' @param A Matrix (n x n) de adjacências do modelo.
+#' @export
 sar_reg_lvero_analitico <- function(param, formula, dados, A){
   # f(y) =(0.5)*log(det((I-rho*A)'*(I-rho*A))) -(n/2)*log(2*pi)-(n/2)*log(sigma^2)-(1/(2*sigma^2))*((Y-X*beta)')*((I-rho*A)'*(I-rho*A))*(Y-X*beta)
   mfx <- model.frame(formula, dados)
@@ -102,6 +106,7 @@ sar_reg_lvero_analitico <- function(param, formula, dados, A){
 #' colocar covariáveis, usar y ~ 1.
 #' @param dados Base de dados (n x k) com as covariáveis de interesse
 #' @param A Matrix (n x n) de adjacências do modelo.
+#' @export
 sar_reg_gradiente_analitico <- function(param, formula, dados, A, ...){
   #d/dbeta = (0.5)*log(det((I-rho*A)'*(I-rho*A))) -(n/2)*log(2*pi)-(n/2)*log(sigma^2)-(1/(2*sigma^2))*((Y-X*beta)')*((I-rho*A)'*(I-rho*A))*(Y-X*beta) = 1/(2*sigma.^2)*X'*(I'-rho*A)*(I-rho*A)*(Y-X*beta)+1/(2*sigma.^2)*X'*(I'-rho*A)*(I+(-rho*A)')*(Y-X*beta)
 
@@ -164,6 +169,7 @@ sar_reg_gradiente_analitico <- function(param, formula, dados, A, ...){
 #' colocar covariáveis, usar y ~ 1.
 #' @param dados Base de dados (n x k) com as covariáveis de interesse
 #' @param A Matrix (n x n) de adjacências do modelo.
+#' @export
 sar_reg_hessiano_analitico <- function(param, formula, dados, A, ...){
   #H11 = d/(dbeta dbeta) 1/(2*sigma.^2)*X'*(I'-rho*A)*(I-rho*A)*(Y-X*beta)+1/(2*sigma.^2)*X'*(I'-rho*A)*(I+(-rho*A)')*(Y-X*beta) = -1/sigma.^2*X'*(I'-rho*A)*(I-rho*A)*X
 
@@ -281,6 +287,7 @@ sar_reg_hessiano_analitico <- function(param, formula, dados, A, ...){
 #' @param verbose Exibe informações durante a maximização
 #' @param tol Tolerância de convergência das estimativas.
 #' @return lista com dados da otimização
+#' @export
 fit_newton <- function(lvero, gr, hess, formula, dados, A, init = NULL, verbose = FALSE, tol = .Machine$double.eps^(1/2), ...){
   ## Chute inicial com estimativas de OLS para os betas e sigma
   re <- lm(formula, data = dados)
@@ -332,6 +339,7 @@ fit_newton <- function(lvero, gr, hess, formula, dados, A, init = NULL, verbose 
 #' @param fit Objeto obtido pela função fit_newton
 #' @return Um objeto da classe 'mle2' herdada do pacote bbmle onde
 #' podemos obter várias estatísticas
+#' @export
 fit_quasi_newton <- function(fit){
   fit <- try(mle2(minuslogl = fit$ll,
                   start = fit$coeficientes,
@@ -362,6 +370,7 @@ fit_quasi_newton <- function(fit){
 #' @param fit Objeto obtido através da função fit_quasi_newton().
 #' @param idcol Nome da variável que será a chave entre com o vetor de predições Y.
 #' @return data.frame com duas colunas (id e pred)
+#' @export
 sar_reg_predict <- function(fit, idcol = "CODBAIRRO"){
   mfx <- model.frame(fit@data$formula, fit@data$dados)
   Y   <- model.response(mfx)
@@ -382,6 +391,7 @@ sar_reg_predict <- function(fit, idcol = "CODBAIRRO"){
 #' @param fit Objeto obtido através da função fit_quasi_newton().
 #' @param idcol Nome da variável que será a chave entre com o vetor de predições Y.
 #' @return data.frame com duas colunas (id e pred)
+#' @export
 sar_reg_predict_oot <- function(fit, idcol = "CODBAIRRO"){
   mfx <- model.frame(fit@data$formula, fit@data$dados)
   Y   <- model.response(mfx)

@@ -16,7 +16,7 @@ editor_options:
     wrap: 80
 fontsize: 11pt
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{llsar}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 
@@ -37,7 +37,7 @@ knitr::opts_chunk$set(
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, attr.source='.numberLines')
+knitr::opts_chunk$set(echo = FALSE, error=F, message=F, warning=F, attr.source='.numberLines')
 if(!require(schoolmath)){install.packages("schoolmath")}
 if(!require(tidyverse)){install.packages("tidyverse")}
 if(!require(knitr)){install.packages("knitr")}
@@ -55,6 +55,8 @@ if(!require(crossfire)){install.packages("crossfire")}
 if(!require(spdep)){install.packages("spdep")}
 if(!require(llsar)){devtools::install_github("evandeilton/llsar")}
 ```
+
+
 
 # Contexto científico
 
@@ -103,7 +105,8 @@ Os dados de shapes de todos os bairros do Rio de Janeiro (163 bairros, em 2020) 
 ```{r, echo=TRUE, eval=FALSE, error=F, message=F, warning=F}
 require(rgdal)
 require(sp)
-m <- rgdal::readOGR("dados/shp/Limite_de_Bairros.shp", verbose = FALSE, stringsAsFactors = FALSE, 
+m <- rgdal::readOGR("dados/shp/Limite_de_Bairros.shp", 
+                    verbose = FALSE, stringsAsFactors = FALSE, 
                     use_iconv = TRUE, encoding = "utf8") %>% 
   sp::spTransform(sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
 rioGrid <- fortify(m, region = "CODBAIRRO_")
@@ -112,23 +115,54 @@ rioGrid <- fortify(m, region = "CODBAIRRO_")
 > OBS: Existe um problema entre os dados de tiroteio no rio e os dados de _shape_, pois o conjunto de dados de tiroteio não possui chave de bairro euquanto o arquivo de _shape_ tem, logo é preciso algum trabalho manual para ajustar as coisas. Outro fato é que os dados de tiroteio estão baseados nos município do censo de 2010, logo os municípios e "Bangu", "Gericinó", "Jabour" e "Vila Kennedy" foram removidos e restaram 159 bairros para dados e shapes. Para simplificar as coisas, colocamos os conjuntos de dados `rio_tiroteio` e `rio_shape` já trabalhados no pacote e eles podem ser baixados como segue:
 
 ```{r, echo=TRUE, eval=TRUE}
-## Dados
+# Dados
 data("rio_tiroteio", package = "llsar")
+
+# Shapes
 data("rio_shape", package = "llsar")
 
 # A: Matriz de proximidades/adjacências
-A <- methods::as(rio_shape, "symmetricMatrix") %>% as.matrix
-
-# Y: Variável resposta que se refere ao total de tiroteios registrados no período de 6 meses com final em novembro/2020.
-Y <- rio_tiroteio$count
+data("rio_proximidades", package = "llsar")
+A <- rio_proximidades
 ```
+
+
+```{r, fig.pos="h", fig.align='center', fig.height=8, fig.width=12, fig.cap="Mapa de ocorrências de tiroteio"}
+rioGrid <- fortify(rio_shape, region = "CODBAIRRO_")
+rioGrid %>%
+  mutate(id = as.integer(id)) %>%
+  left_join(rio_tiroteio, by = c("id" = "CODBAIRRO")) %>%
+  ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = count), col = "Black") +
+  scale_fill_viridis() +
+  theme_classic() +
+  theme(legend.title = element_blank())
+```
+
+
+
+```{r, fig.pos="h", fig.align='center', fig.height=8, fig.width=12, fig.cap="Matriz de adjacências entre bairros do Rio de Janeiro"}
+op <- par(mar = c(5, 4, 4, 2) - 1.5)
+rioPoly <- poly2nb(rio_shape, row.names = rio_shape@data$NOME)
+rioNN <- nb2listw(rioPoly, style = "B", zero.policy = TRUE)
+plot(rio_shape, main = "")
+plot(rioNN, coordinates(rio_shape), col = "blue", add = TRUE)
+```
+
 
 # Modelo SAR
 
 Essa classe de modelos faz parte dos modelos de regressão geoespaciais e são muito aplicados a fenômenos que se distibuiem espacialmente em uma região/mapa. Nesse estudo, a aplicação é a distribuição de tiroteio nos bairros da cidade do Rio de Janeiro no segundo semestre junho a novembro de 2020. Este é um exemplo didático, assim apesar dos dados não serem normais (para uma introdução veja Cressie, 1993, pág.
 383) vamos trabalhar com o modelo SAR. Modelos SAR (_Spatial AutoRegressivo_) são frequentemente chamados de Spatial Lagged Model (_SLM_), mas a notação de ambos é igual.
 
-Na literatura o modelo SAR pode ser escrito como $$ Y_i-\mu = \rho \sum_{j \in v(i)}(Y_j-\mu)+\epsilon$$ em que $v(i)$ é o conjunto de índices adjacentes à localização i; mas sem o próprio i; $0 \le rho < c_0 < 1$ e $\epsilon \sim N(\textbf{0}, \sigma^2 \textbf{I}).$ Nesse caso, pode-se mostrar que o modelo é equivalente a $$(\textbf{I}-\rho\textbf{A})(\textbf{A}-\mu\textbf{1}) = \epsilon \ldots(1),$$ em que $\textbf{A}$ é a matriz de adjacências. Consequentemente, $E(\textbf{Y}) = \mu\textbf{1}$ e Var$(\textbf{Y}) = \sigma^2(\textbf{I}-\rho \textbf{A})^{-2}.$ Com base em (1), é possível construir a funão de verossimilhança do modelo e a implementação do Método de Newton-Rapson.
+Na literatura o modelo SAR pode ser escrito como $$ Y_i-\mu = \rho \sum_{j \in v(i)}(Y_j-\mu)+\epsilon$$ em que $v(i)$ é o conjunto de índices adjacentes à localização i; mas sem o próprio i; $0 \le \rho < c_0 < 1$ e $\epsilon \sim N(\textbf{0}, \sigma^2 \textbf{I}).$ Nesse caso, pode-se mostrar que o modelo é equivalente a $$(\textbf{I}-\rho\textbf{A})(\textbf{A}-\mu\textbf{1}) = \epsilon \ldots(1),$$ em que $\textbf{A}$ é a matriz de adjacências. Consequentemente, se o modelo SAR for simples, isto é, sem covariáveis $E(\textbf{Y}) = \mu\textbf{1}$ e Var$(\textbf{Y}) = \sigma^2(\textbf{I}-\rho \textbf{A})^{-2}.$ onde $\mu$ é uma contante multiplicada por um vetor constante de escalares, digamos $\textbf{1}s$. Quando o modelo possui preditoras $E(\textbf{Y}) = \mu = \textbf{X} \beta$. Com base em (1), é possível construir a função de verossimilhança do modelo e a implementação do Método de Newton-Rapson. 
+
+  - $\textbf{Y}$ é um vetor $n × 1$ da variável dependente;
+  - $\textbf{A}$ é a matroz de ajdacências ou pesos espaciais $n × n$;
+  - $\textbf{X}$ é uma matriz $n × k$ que é a metrix de variáveis independentes (marix de delineamento experimental);
+  - $\beta$ é o vetor $k x 1$ de parâmetros do modelo;
+  - $\rho$ é o prâmetro que mde o grau de correlação espacial entres os bairros;
+  - $\epsilon$ é o vetor $n × 1$ de termos de erro do modelo.
 
 O modelo sugerido tem a forma $$\begin{aligned}
 Y_i-\mu = \rho \sum_{j \in v(i)}(Y_j-\mu)+\epsilon \\
@@ -138,9 +172,9 @@ Y_i-\mu = \rho \sum_{j \in v(i)}(Y_j-\mu)+\epsilon \\
 &= (\textbf{I}-\rho\textbf{A})(\textbf{Y}-\mu\textbf{1})
 \end{aligned}$$ e como dado por definição do problema $\textbf{Y} \sim \textbf{N}_{mv} (\mu\textbf{1}, \sigma^2(\textbf{I}-\rho \textbf{A})^{-2}).$ Com isso a meta é estimar, através do método de máxima verossimilhança, os parâmetros do modelo dado com maximização através do método de Newton-Rapson. Para tanto, determina-se três funções principais:
 
-  - (1) $l(\theta)$ que é o log da função de verossomilhança $L(\theta)$ para uma realização de uma normal multivariada com média $E(\textbf{Y}) = \mu\textbf{1}$ e variância $Var(\textbf{Y}) = \sigma^2(\textbf{I}-\rho \textbf{A})^{-2}$
-  - (2) vetor gradiente de $l(\theta)$ e 
-  - (3) matriz hessiana de $l(\theta)$, onde $\theta = (\beta^{\top}, \sigma^2, \rho)$.
+  - $l(\theta)$ que é o log da função de verossomilhança $L(\theta)$ para uma realização de uma normal multivariada com média $E(\textbf{Y}) = \mu\textbf{1}$ e variância $Var(\textbf{Y}) = \sigma^2(\textbf{I}-\rho \textbf{A})^{-2}$
+  - Vetor gradiente de $l(\theta)$ e 
+  - Matriz hessiana de $l(\theta)$, onde $\theta = (\beta^{\top}, \sigma^2, \rho)$.
   
 Além disso, precisamos programar a função dos preditos do modelo final e realizar os estudos necessários. Os preditos foram definidos a partir de duas visões, a primeira é direta pela definição do problema, pois tem-se que $E(Y) = \mu$ e a segunda, dada pela nova definição chamada de _out-of-sample_ (oot), é dada pela expressão $\hat{Y_i} = \hat{\mu} + \hat{\Sigma}_{(i,-i)}\hat{\Sigma}_{(-i,-i)}^{-1}(Y_{-i}-\hat{\mu}\mathbf{1}),$ onde os indices $(i=i,j=-i)$ e $(i = -i,j = -i)$ indicam respectivamente só linha $i$ sem coluna $i$ e sem linha $i$ nem coluna $i$. Em $Y_{-i}$ indica sem a observação $i$.
 
@@ -189,14 +223,24 @@ O procedimento de ajuste por Newton programada é flexível para ajustar modelos
 
 ## Estimativas modelo sem preditoras
 
-Utilizando como chutes iniciais os valores presentes na Tabela 2, obtidos através da função `fit_newton()`, estimou-se $c_0$ que é o máximo obtido por $\rho$ foi igual a `r fit1_profile@profile$rho %>% as.matrix() %>% as.data.frame() %>% dplyr::select(ncol(.)) %>% pull() %>% max()` com `r a1$processamento %>% nrow()` iterações. O código a seguir mostra como foram obtidos os resultados atráves de nossa solução implementada.
-
-```{r, echo=T, eval=F}
-a1 <- fit_newton(lvero = sar_reg_lvero_analitico, gr = sar_reg_gradiente_analitico, 
+```{r, echo=F, eval=T}
+a1 <- fit_newton(lvero = sar_reg_lvero_analitico, 
+                 gr = sar_reg_gradiente_analitico, 
                  hess = sar_reg_hessiano_analitico,
                  formula = count ~ 1, dados = rio_tiroteio, A = A, verbose = F)
 fit1 <- fit_quasi_newton(a1)
-fit1_profile <- profile(fit1)
+fit1_profile <- bbmle::profile(fit1)
+```
+
+Utilizando como chutes iniciais os valores presentes na Tabela 2, obtidos através da função `fit_newton()`, estimou-se $c_0$ que é o máximo obtido por $\rho$ foi igual a `r fit1_profile@profile$rho %>% as.matrix() %>% as.data.frame() %>% dplyr::select(ncol(.)) %>% pull() %>% max()` com `r a1$processamento %>% nrow()` iterações. O código a seguir mostra como foram obtidos os resultados atráves de nossa solução implementada.
+
+```{r, echo=T, eval=F}
+a1 <- fit_newton(lvero = sar_reg_lvero_analitico, 
+                 gr = sar_reg_gradiente_analitico, 
+                 hess = sar_reg_hessiano_analitico,
+                 formula = count ~ 1, dados = rio_tiroteio, A = A, verbose = F)
+fit1 <- fit_quasi_newton(a1)
+fit1_profile <- bbmle::profile(fit1)
 ```
 
 
@@ -208,8 +252,6 @@ a1$processamento %>%
                caption = "Chutes iniciais",
                col.names = c("mu","sigma","rho","loglik","niteracoes"),
                row.names = F)
-# %>% 
-#   kableExtra::kable_styling(font_size = tfonte)
 ```
 
 Embora tendo que $\rho$ foi estimado com valor negativo e estatísticamente igual a zero, [@ord1975estimation] argumenta que sob algumas condições dos pesos, tem-se que $\rho < 1$. Além disso, se consideramos o módulo de $|\rho|$ teremos uma estimativa que atende o critério dado nesse problema. O perfil de verossimilhança na Figura 1 mostra que no range de variação, ele pode ser qualquer valor entre zero e 0.06 com 99% de confiança. Do mesmo modo as outras estimativas estão contidas em intervalos bem definidos e sem sinais de alteração em virtude de mínimos locais.
@@ -239,12 +281,13 @@ tidy(fit1) %>%
 
 Também foi analisado o modelo SAR com o logaritmo das covariáveis Inhabitants e Area explicando a contagem de tiroteios (count), porém apenas a variável `loginhabitants` teve estimativa significativa. O código abaixo mostra como a estimação foi feita.
 
-```{r, echo=T, eval=F}
-a2 <- fit_newton(lvero = sar_reg_lvero_analitico, gr = sar_reg_gradiente_analitico, 
+```{r, echo=T, eval=T}
+a2 <- fit_newton(lvero = sar_reg_lvero_analitico, 
+                 gr = sar_reg_gradiente_analitico, 
                  hess = sar_reg_hessiano_analitico,
                  formula = count ~ loginhabitants, dados = rio_tiroteio, A = A, verbose = F)
 fit2 <- fit_quasi_newton(a2)
-fit2_profile <- profile(fit1)
+fit2_profile <- bbmle::profile(fit2)
 ```
 
 Semelhante ao primeiro caso, e utilizando como chutes iniciais os valores presentes na Tabela 4, $c_0$ que é o máximo obtido por $\rho$ foi igual a `r fit2_profile@profile$rho %>% as.matrix() %>% as.data.frame() %>% dplyr::select(ncol(.)) %>% pull() %>% max()` com `r a2$processamento %>% nrow()` iterações.
@@ -285,7 +328,7 @@ A Figura 2 mostra que houve oscilação na convergência do intercepto e também
 
 Na Tabela 6 tem-se que em 20% das unidades amostradas houve entre 27 e 101 registros de tiroteio na amostra observada. Já para os preditos, temos que no modelo simples, a valor predito ficou entre 9 e 10 para todos os municípios. Já para o modelo com a variável loginhabitants os preditos foram mais realistas.
 
-```{r, eval=F, echo=T}
+```{r, eval=T, echo=T}
 predict_simples     <- sar_reg_predict(fit1) %>% rename("pred_s" = pred)
 predict_covariaveis <- sar_reg_predict(fit2) %>% rename("pred_c" = pred)
 ```
@@ -316,7 +359,7 @@ Os top cinco municípios com mais ocorrências de acordo a base são: Cidade de 
 ```{r, fig.pos="h", fig.align='center', fig.height=4, fig.width=10, fig.cap="Perfis de verossimilhança"}
 rioGrid <- try(fortify(rio_shape, region = "CODBAIRRO_"))
 
-da <- rio_shape %>%
+da <- rioGrid %>%
   dplyr::mutate(id = as.integer(id)) %>%
   dplyr::left_join(predis, by = "id")
 
