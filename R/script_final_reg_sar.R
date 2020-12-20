@@ -432,7 +432,7 @@ sar_reg_predict_oot <- function(fit, idcol = "CODBAIRRO"){
   return(data.frame(id = as.numeric(fit@data$dados[,idcol]), pred = out))
 }
 
-#' Determina o traco de uma matrix m
+# Determina o traco de uma matrix m
 traco <- function(m){
   sum(diag(m))
 }

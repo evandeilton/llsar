@@ -10,7 +10,7 @@ matrix:
     after_success:
     - Rscript -e 'covr::codecov()'
     before_cache:
-    - Rscript -e 'remotes::install_cran("pkgdown","schoolmath","rgdal","maptools","viridis","rgeos","spdep","gpclib")'
+    - Rscript -e 'remotes::install_cran("pkgdown","schoolmath","rgdal","maptools","viridis","rgeos","spdep","sp","gpclib","tidyverse")'
     - Rscript -e 'remotes::install_github("rstudio/rmarkdown")' # https://github.com/rstudio/rmarkdown/pull/1668
     - Rscript -e 'remotes::install_github("tidyverse/tidytemplate")'
     # deploy:
