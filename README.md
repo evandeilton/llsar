@@ -26,6 +26,14 @@ O pacote pode ser instalado diretamente pelo
 devtools::install_github("evandeilton/llsar")
 ```
 
+## Vinheta
+
+Para o estudo detalhado vejas a vinheta.
+
+``` r
+vignette(topic = "llsar", package = "llsar")
+```
+
 ## Exemplos
 
 ### Carregando dados
@@ -59,7 +67,7 @@ system.time({
   fit1_profile <- bbmle::profile(fit1) 
 })
 #>    user  system elapsed 
-#>   42.55    0.07   42.67
+#>   41.75    0.00   41.79
 ```
 
 ### Ajuste do modelo CAR com uma covariável algebricamente
@@ -74,7 +82,7 @@ system.time({
   fit1_profile <- bbmle::profile(fit1)
 })
 #>    user  system elapsed 
-#>    22.5     0.0    22.5
+#>   21.67    0.00   21.67
 ```
 
 ### Estatísticas
@@ -85,7 +93,7 @@ plot(fit1_profile)
 
 <div class="figure" style="text-align: center">
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" alt="Perfis de verossimilhança" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" alt="Perfis de verossimilhança" width="100%" />
 <p class="caption">
 Perfis de verossimilhança
 </p>

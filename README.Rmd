@@ -49,6 +49,14 @@ O pacote pode ser instalado diretamente pelo [GitHub](https://github.com/) com:
 devtools::install_github("evandeilton/llsar")
 ```
 
+## Vinheta
+
+Para o estudo detalhado vejas a vinheta.
+
+```{r}
+vignette(topic = "llsar", package = "llsar")
+```
+
 ## Exemplos
 
 ### Carregando dados
